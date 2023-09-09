@@ -27,7 +27,10 @@ def access():
     if code:
         try:
             user = jsonpickle.decode(base64.b64decode(code))
-            return Response(status=200, response='Hello ' + user.username)
+            if user.username == 'guest' or user.username == 'worker':
+                return Response(status=200, response='Hello ' + user.username)
+            else:
+                return Response(status=403, response='Error: Unauthorized')
         except Exception as e:
             return Response(status=500, response='Error: ' + str(e))
     else:
